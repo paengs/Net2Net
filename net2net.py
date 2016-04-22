@@ -191,7 +191,7 @@ if __name__ == '__main__':
     w1 = np.random.rand(100, 50)
     b1 = np.random.rand(50,1)
     w2 = np.random.rand(50, 10)
-    nw1, nb1, nw2 = obj.wider(w1, b1, w2, 70)
+    obj.wider(w1, b1, w2, 70)
     print 'Succeed: Net2Wider (fc)'
 
     w1 = np.random.rand(3,3,16,32)
