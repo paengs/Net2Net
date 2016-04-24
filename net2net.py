@@ -31,7 +31,8 @@ class Net2Net(object):
             deeper_w = np.eye(weight.shape[1])
             deeper_b = np.zeros(weight.shape[1])
             if verification:
-                assert np.sum(np.dot(weight,deeper_w)-weight) < 1e-9, 'Verification failed'
+                err = np.abs(np.sum(np.dot(weight, deeper_w)-weight))
+                assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
         else:
             deeper_w = np.zeros((weight.shape[0], weight.shape[1], weight.shape[3], weight.shape[3]))
             assert weight.shape[0] % 2 == 1 and weight.shape[1] % 2 == 1, 'Kernel size should be odd'
@@ -57,7 +58,8 @@ class Net2Net(object):
                         if j==0: tmp = scipy.signal.convolve2d(ori[:,:,j], deeper_w[:,:,j,i], mode='same')
                         else: tmp += scipy.signal.convolve2d(ori[:,:,j], deeper_w[:,:,j,i], mode='same')
                     new[:,:,i] = tmp
-                assert np.abs(np.sum(ori-new)) < 1e-9, 'Verification failed'
+                err = np.abs(np.sum(ori-new))
+                assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
         return deeper_w, deeper_b
 
     def wider(self, weight1, bias1, weight2, new_width, verification=True):
@@ -142,7 +144,8 @@ class Net2Net(object):
                     if j==0: tmp = scipy.signal.convolve2d(new1[:,:,j], student_w2[:,:,j,i], mode='same')
                     else: tmp += scipy.signal.convolve2d(new1[:,:,j], student_w2[:,:,j,i], mode='same')
                 new2[:,:,i] = tmp
-            assert np.abs(np.sum(ori2-new2)) < 1e-9, 'Verification failed'
+            err = np.abs(np.sum(ori2-new2))
+            assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
         return student_w1, student_b1, student_w2
         
     def _wider_fc(self, teacher_w1, teacher_b1, teacher_w2, new_width, verification):
@@ -173,7 +176,8 @@ class Net2Net(object):
             ori2 = np.dot(ori1, teacher_w2)
             new1 = np.dot(inputs, student_w1) + student_b1
             new2 = np.dot(new1, student_w2)
-            assert np.abs(np.sum(ori2-new2)) < 1e-9, 'Verification failed'
+            err = np.abs(np.sum(ori2-new2))
+            assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
         return student_w1, student_b1, student_w2
 
 if __name__ == '__main__':
