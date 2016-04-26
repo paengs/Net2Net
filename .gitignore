@@ -1,0 +1,6 @@
+*.pyc
+*.meta
+*model*
+checkpoint
+MNIST_data/
+logs*
