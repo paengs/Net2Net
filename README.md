@@ -5,7 +5,7 @@
 - Net2Deeper
 
 ## Net2Net using Tensorflow
-- Test on MNIST dataset
+- Test in MNIST dataset
 
 # Dependencies
 
@@ -16,3 +16,19 @@
 ## Tensorflow examples
 - Tensorflow
 - Slim
+
+# Results
+@ Test in MNIST dataset
+1. Train a teacher network
+2. Resume training in same architecture
+3. Train a student network (Net2Wider)
+  - # of filters in 'conv1' layer [32->128]
+4. Train a student network (Net2Deeper)
+  - Insert a new layer after 'conv1' layer
+
+@ Results
+NOTE: All parameters are fixed.
+1. validation accuracy: 96.39%
+2. validation accuracy: 97.39% 
+3. validation accuracy: 97.85%
+4. validation accuracy: 97.75%
