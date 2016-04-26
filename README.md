@@ -37,7 +37,7 @@
 
 @ Results
 
-NOTE: All parameters are fixed.
+NOTE: All parameters are fixed except new weights from Net2Net.
 
 1. validation accuracy: 96.39%
 
