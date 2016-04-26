@@ -23,11 +23,11 @@
 
 - Baseline architecture
 
-5x5x32(conv1)-pool1-5x5x64(conv2)-pool2-1024(fc1)-10(fc2)
+  - 5x5x32(conv1)-pool1-5x5x64(conv2)-pool2-1024(fc1)-10(fc2)
 
-1. Train a teacher network
+1. Train a teacher network (baseline)
 
-2. Resume training in same architecture
+2. Resume training a teacher network(1)
 
 3. Train a student network (Net2Wider)
   - # of filters in 'conv1' layer [32->128]
