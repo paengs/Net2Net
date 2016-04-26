@@ -21,6 +21,10 @@
 
 @ Test in MNIST dataset
 
+- Baseline architecture
+
+5x5x32(conv1)-pool1-5x5x64(conv2)-pool2-1024(fc1)-10(fc2)
+
 1. Train a teacher network
 
 2. Resume training in same architecture
