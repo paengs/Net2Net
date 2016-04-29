@@ -20,6 +20,7 @@ Written by Kyunghyun Paeng
 
 """
 import numpy as np
+import scipy.signal
 import tensorflow as tf
 from slim import ops
 from slim import scopes
@@ -198,7 +199,7 @@ def tf_net2wider(model, weight, target_layer, next_layer, new_width):
         net = load_teacher_net(sess, model, weight)
         w1, b1 = get_weight_bias_of_layer(net, target_layer)
         w2, b2 = get_weight_bias_of_layer(net, next_layer)
-        nw1, nb1, nw2 = n2n.wider(w1, b1, w2, new_width, False)
+        nw1, nb1, nw2 = n2n.wider(w1, b1, w2, new_width, True)
     return nw1, nb1, nw2, b2
 
 def tf_net2deeper(model, weight, target_layer):
@@ -206,7 +207,7 @@ def tf_net2deeper(model, weight, target_layer):
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         net = load_teacher_net(sess, model, weight)
         w1, b1 = get_weight_bias_of_layer(net, target_layer)
-        new_w, new_b = n2n.deeper(w1, False)
+        new_w, new_b = n2n.deeper(w1, True)
     return new_w, new_b
 
 if __name__ == '__main__':
