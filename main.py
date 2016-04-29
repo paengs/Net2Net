@@ -16,7 +16,7 @@ Net2Net using Tensorflow
   3. validation accuracy: 97.85%
   4. validation accuracy: 97.75%
 
-Written by Kyunghyun Paeng
+Author: Kyunghyun Paeng
 
 """
 import numpy as np
