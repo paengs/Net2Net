@@ -32,7 +32,7 @@ class Net2Net(object):
             deeper_b = np.zeros(weight.shape[1])
             if verification:
                 err = np.abs(np.sum(np.dot(weight, deeper_w)-weight))
-                assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
+                assert err < 1e-5, 'Verification failed: [ERROR] {}'.format(err)
         else:
             deeper_w = np.zeros((weight.shape[0], weight.shape[1], weight.shape[3], weight.shape[3]))
             assert weight.shape[0] % 2 == 1 and weight.shape[1] % 2 == 1, 'Kernel size should be odd'
@@ -59,7 +59,7 @@ class Net2Net(object):
                         else: tmp += scipy.signal.convolve2d(ori[:,:,j], deeper_w[:,:,j,i], mode='same')
                     new[:,:,i] = tmp
                 err = np.abs(np.sum(ori-new))
-                assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
+                assert err < 1e-5, 'Verification failed: [ERROR] {}'.format(err)
         return deeper_w, deeper_b
 
     def wider(self, weight1, bias1, weight2, new_width, verification=True):
@@ -145,7 +145,7 @@ class Net2Net(object):
                     else: tmp += scipy.signal.convolve2d(new1[:,:,j], student_w2[:,:,j,i], mode='same')
                 new2[:,:,i] = tmp
             err = np.abs(np.sum(ori2-new2))
-            assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
+            assert err < 1e-5, 'Verification failed: [ERROR] {}'.format(err)
         return student_w1, student_b1, student_w2
         
     def _wider_fc(self, teacher_w1, teacher_b1, teacher_w2, new_width, verification):
@@ -177,7 +177,7 @@ class Net2Net(object):
             new1 = np.dot(inputs, student_w1) + student_b1
             new2 = np.dot(new1, student_w2)
             err = np.abs(np.sum(ori2-new2))
-            assert err < 1e-6, 'Verification failed: [ERROR] {}'.format(err)
+            assert err < 1e-5, 'Verification failed: [ERROR] {}'.format(err)
         return student_w1, student_b1, student_w2
 
 if __name__ == '__main__':
