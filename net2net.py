@@ -95,6 +95,39 @@ class Net2Net(object):
             assert weight1.shape[3] == len(bias1), 'Check shape of bias'
             assert weight1.shape[3] < new_width, 'new_width should be larger than old width'
             return self._wider_conv(weight1, bias1, weight2, new_width, verification)
+    
+    def wider_rand(self, weight1, bias1, weight2, new_width):
+        """ Net2Wider operation with random pad (baseline)
+        
+        All weights & biases should be 'numpy' array.
+        If it is 'conv' type, weight.ndim = 4 (kH, kW, InChannel, OutChannel)
+        If it is 'fc' type, weight.ndim = 2 (In, Out)
+        
+        Args:    
+            weight1: weight matrix of a target layer
+            bias1: biases of a target layer, bias1.ndim = 1
+            weight2: weight matrix of a next layer
+            new_width: It should be larger than old width.
+                     (i.e., 'conv': weight1.OutChannel < new_width,
+                            'fc'  : weight1.Out < new_width )
+        Returns:
+            Transformed weights & biases (w1, b1, w2)
+        """
+        # Check dimensions
+        assert bias1.squeeze().ndim==1, 'Check bias.ndim'
+        assert weight1.ndim == 4 or weight1.ndim == 2, 'Check weight1.ndim'
+        assert weight2.ndim == 4 or weight2.ndim == 2, 'Check weight2.ndim'
+        bias1 = bias1.squeeze()
+        if weight1.ndim == 2:
+            assert weight1.shape[1] == weight2.shape[0], 'Check shape of weight'
+            assert weight1.shape[1] == len(bias1), 'Check shape of bias'
+            assert weight1.shape[1] < new_width, 'new_width should be larger than old width'
+            return self._wider_fc_rand(weight1, bias1, weight2, new_width)
+        else:
+            assert weight1.shape[3] == weight2.shape[2], 'Check shape of weight'
+            assert weight1.shape[3] == len(bias1), 'Check shape of bias'
+            assert weight1.shape[3] < new_width, 'new_width should be larger than old width'
+            return self._wider_conv_rand(weight1, bias1, weight2, new_width)
            
     def _wider_conv(self, teacher_w1, teacher_b1, teacher_w2, new_width, verification):
         rand = np.random.randint(teacher_w1.shape[3], size=(new_width-teacher_w1.shape[3]))
@@ -148,6 +181,26 @@ class Net2Net(object):
             err = np.abs(np.sum(ori2-new2))
             assert err < self._error_th, 'Verification failed: [ERROR] {}'.format(err)
         return student_w1, student_b1, student_w2
+
+    def _wider_conv_rand(self, teacher_w1, teacher_b1, teacher_w2, new_width):
+        size = new_width-teacher_w1.shape[3]
+        student_w1 = teacher_w1.copy()
+        student_w2 = teacher_w2.copy()
+        student_b1 = teacher_b1.copy()
+        # target layer update (i)
+        for i in xrange(size):
+            shape = teacher_w1[:,:,:,0].shape
+            new_weight = np.random.normal(0, 0.1, size=shape)
+            new_weight = new_weight[:, :, :, np.newaxis]
+            student_w1 = np.concatenate((student_w1, new_weight), axis=3)
+            student_b1 = np.append(student_b1, 0.1)
+        # next layer update (i+1)
+        for i in xrange(size):
+            shape = teacher_w2[:,:,0,:].shape
+            new_weight = np.random.normal(0, 0.1, size=shape)
+            new_weight_re = new_weight[:, :, np.newaxis, :]
+            student_w2 = np.concatenate((student_w2, new_weight_re), axis=2)
+        return student_w1, student_b1, student_w2
         
     def _wider_fc(self, teacher_w1, teacher_b1, teacher_w2, new_width, verification):
         rand = np.random.randint(teacher_w1.shape[1], size=(new_width-teacher_w1.shape[1]))
@@ -179,6 +232,26 @@ class Net2Net(object):
             new2 = np.dot(new1, student_w2)
             err = np.abs(np.sum(ori2-new2))
             assert err < self._error_th, 'Verification failed: [ERROR] {}'.format(err)
+        return student_w1, student_b1, student_w2
+    
+    def _wider_fc_rand(self, teacher_w1, teacher_b1, teacher_w2, new_width):
+        size = new_width-teacher_w1.shape[1]
+        student_w1 = teacher_w1.copy()
+        student_w2 = teacher_w2.copy()
+        student_b1 = teacher_b1.copy()
+        # target layer update (i)
+        for i in xrange(size):
+            shape = teacher_w1[:,0].shape
+            new_weight = np.random.normal(0, 0.1, size=shape)
+            new_weight = new_weight[:, np.newaxis]
+            student_w1 = np.concatenate((student_w1, new_weight), axis=1)
+            student_b1 = np.append(student_b1, 0.1)
+        # next layer update (i+1)
+        for i in xrange(size):
+            shape = teacher_w2[0,:].shape
+            new_weight = np.random.normal(0, 0.1, size=shape)
+            new_weight = new_weight[np.newaxis, :]
+            student_w2 = np.concatenate((student_w2, new_weight), axis=0)
         return student_w1, student_b1, student_w2
 
 if __name__ == '__main__':
