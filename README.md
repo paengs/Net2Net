@@ -1,4 +1,4 @@
-# Net2Net: Accelerating Learning via Knowledge Transfer
+# Net2Net : Accelerating Learning via Knowledge Transfer
 
 - Numpy-based Net2Net module
   - Net2Wider
