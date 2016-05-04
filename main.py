@@ -10,13 +10,7 @@ Net2Net using Tensorflow
     - Insert a new layer after 'conv1' layer
   5. Random initialization (Net2Deeper baseline)
 
-  @ Results
   NOTE: All parameters are fixed expect new weights from Net2Net.
-  1. Validation accuracy: 96.39%
-  2. Validation accuracy: 97.39% 
-  3. Validation accuracy: 97.85%
-  4. Validation accuracy: 97.75%
-  5. Validation accuracy: 97.75%
 
 Author: Kyunghyun Paeng
 
