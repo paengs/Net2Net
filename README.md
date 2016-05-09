@@ -98,5 +98,6 @@
   ```
   
 ## Notes
-All parameters are fixed except new weights from Net2Net.
+- All parameters are fixed except new weights from Net2Net.
+- The Net2Net core module (net2net.py) can be used in various deep learning libraries (theano, caffe etc.) because it has only numpy dependency. 
 
