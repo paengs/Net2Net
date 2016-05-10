@@ -218,7 +218,7 @@ def train_a_teacher_network():
 
 def load_teacher_net(sess, model, weights):
     saver = tf.train.import_meta_graph(model)
-    saver.restore(sess, WEIGHT)
+    saver.restore(sess, weights)
     return sess.graph
 
 def get_weight_bias_of_layer(net, layer_name, numpy=True):
