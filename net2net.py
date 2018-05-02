@@ -12,7 +12,7 @@ import numpy as np
 class Net2Net(object):
     def __init__(self, error=1e-4):
         self._error_th = error
-        print 'Net2Net module initialize...'
+        print('Net2Net module initialize...')
 
     def deeper(self, weight, verification=True):
         """ Net2Deeper operation
@@ -37,8 +37,8 @@ class Net2Net(object):
         else:
             deeper_w = np.zeros((weight.shape[0], weight.shape[1], weight.shape[3], weight.shape[3]))
             assert weight.shape[0] % 2 == 1 and weight.shape[1] % 2 == 1, 'Kernel size should be odd'
-            center_h = (weight.shape[0]-1)/2
-            center_w = (weight.shape[1]-1)/2
+            center_h = (weight.shape[0]-1)//2
+            center_w = (weight.shape[1]-1)//2
             for i in range(weight.shape[3]):
                 tmp = np.zeros((weight.shape[0], weight.shape[1], weight.shape[3]))
                 tmp[center_h, center_w, i] = 1
@@ -136,14 +136,14 @@ class Net2Net(object):
         student_w2 = teacher_w2.copy()
         student_b1 = teacher_b1.copy()
         # target layer update (i)
-        for i in xrange(len(rand)):
+        for i in range(len(rand)):
             teacher_index = rand[i]
             new_weight = teacher_w1[:, :, :, teacher_index]
             new_weight = new_weight[:, :, :, np.newaxis]
             student_w1 = np.concatenate((student_w1, new_weight), axis=3)
             student_b1 = np.append(student_b1, teacher_b1[teacher_index])
         # next layer update (i+1)
-        for i in xrange(len(rand)):
+        for i in range(len(rand)):
             teacher_index = rand[i]
             factor = replication_factor[teacher_index] + 1
             assert factor > 1, 'Error in Net2Wider'
@@ -188,14 +188,14 @@ class Net2Net(object):
         student_w2 = teacher_w2.copy()
         student_b1 = teacher_b1.copy()
         # target layer update (i)
-        for i in xrange(size):
+        for i in range(size):
             shape = teacher_w1[:,:,:,0].shape
             new_weight = np.random.normal(0, 0.1, size=shape)
             new_weight = new_weight[:, :, :, np.newaxis]
             student_w1 = np.concatenate((student_w1, new_weight), axis=3)
             student_b1 = np.append(student_b1, 0.1)
         # next layer update (i+1)
-        for i in xrange(size):
+        for i in range(size):
             shape = teacher_w2[:,:,0,:].shape
             new_weight = np.random.normal(0, 0.1, size=shape)
             new_weight_re = new_weight[:, :, np.newaxis, :]
@@ -209,14 +209,14 @@ class Net2Net(object):
         student_w2 = teacher_w2.copy()
         student_b1 = teacher_b1.copy()
         # target layer update (i)
-        for i in xrange(len(rand)):
+        for i in range(len(rand)):
             teacher_index = rand[i]
             new_weight = teacher_w1[:, teacher_index]
             new_weight = new_weight[:, np.newaxis]
             student_w1 = np.concatenate((student_w1, new_weight), axis=1)
             student_b1 = np.append(student_b1, teacher_b1[teacher_index])
         # next layer update (i+1)
-        for i in xrange(len(rand)):
+        for i in range(len(rand)):
             teacher_index = rand[i]
             factor = replication_factor[teacher_index] + 1
             assert factor > 1, 'Error in Net2Wider'
@@ -240,14 +240,14 @@ class Net2Net(object):
         student_w2 = teacher_w2.copy()
         student_b1 = teacher_b1.copy()
         # target layer update (i)
-        for i in xrange(size):
+        for i in range(size):
             shape = teacher_w1[:,0].shape
             new_weight = np.random.normal(0, 0.1, size=shape)
             new_weight = new_weight[:, np.newaxis]
             student_w1 = np.concatenate((student_w1, new_weight), axis=1)
             student_b1 = np.append(student_b1, 0.1)
         # next layer update (i+1)
-        for i in xrange(size):
+        for i in range(size):
             shape = teacher_w2[0,:].shape
             new_weight = np.random.normal(0, 0.1, size=shape)
             new_weight = new_weight[np.newaxis, :]
@@ -260,20 +260,20 @@ if __name__ == '__main__':
 
     w1 = np.random.rand(100, 50)
     obj.deeper(w1)
-    print 'Succeed: Net2Deeper (fc)'
+    print('Succeed: Net2Deeper (fc)')
     
     w1 = np.random.rand(3,3,16,32)
     obj.deeper(w1)
-    print 'Succeed: Net2Deeper (conv)'
+    print('Succeed: Net2Deeper (conv)')
     
     w1 = np.random.rand(100, 50)
     b1 = np.random.rand(50,1)
     w2 = np.random.rand(50, 10)
     obj.wider(w1, b1, w2, 70)
-    print 'Succeed: Net2Wider (fc)'
+    print('Succeed: Net2Wider (fc)')
 
     w1 = np.random.rand(3,3,16,32)
     b1 = np.random.rand(32)
     w2 = np.random.rand(3,3,32,64)
     obj.wider(w1, b1, w2, 48)
-    print 'Succeed: Net2Wider (conv)'
+    print('Succeed: Net2Wider (conv)')

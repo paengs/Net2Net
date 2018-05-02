@@ -70,7 +70,7 @@ def l2_loss(tensor, weight=1.0, scope=None):
     weight = tf.convert_to_tensor(weight,
                                   dtype=tensor.dtype.base_dtype,
                                   name='loss_weight')
-    loss = tf.mul(weight, tf.nn.l2_loss(tensor), name='value')
+    loss = tf.multiply(weight, tf.nn.l2_loss(tensor), name='value')
     tf.add_to_collection(LOSSES_COLLECTION, loss)
     return loss
 
